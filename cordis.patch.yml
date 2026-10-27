@@ -1,0 +1,14 @@
+# dsh-mobile-shell — bundle patch
+#
+# `insert` adds one plugin entry to the DSH config tree:
+#   - `id`   must equal the package name;
+#   - `name` resolves to the package entry (lib/index.js, a no-op server half).
+# `package.json` also declares `dsh.client`, which makes DSH treat this package
+# as a browser plugin and serve lib/client.js to the page.
+#
+# If you publish under a different name, keep `id` and `name` in sync here and
+# in the `id` field at the top of lib/client.js.
+
+- insert:
+    - id: 'dsh-mobile-shell'
+      name: 'dsh-mobile-shell'

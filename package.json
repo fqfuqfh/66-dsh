@@ -1,0 +1,42 @@
+{
+  "name": "dsh-mobile-shell",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Narrow-screen shell for the DSH web GUI: a single column, no right panel, the sidebar rail removed, and the session list reachable from a floating whale button in the top bar.",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "mobile",
+    "responsive",
+    "css"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-layout"
+      ],
+      "platform": "web"
+    }
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  }
+}
