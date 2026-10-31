@@ -25,7 +25,7 @@ Everything is scoped to `@media (max-width: 900px)`, so desktop stays untouched.
 
 | Area | Before | After |
 |---|---|---|
-| Right panel | shown, steals the width | hidden |
+| Right panel | shown, steals the width | hidden as a track, but left in the DOM below 768 px so the document preview still works (see Compatibility) |
 | Sidebar rail | 56 px, always on screen | removed in the collapsed state |
 | Session list | the rail button | 🐳 button, top-left |
 | Session header | full-width row, 76 px + tab row | floating `…`, top-right |
@@ -49,7 +49,7 @@ Then add it to the profile's `package.json`:
 
 ```json
 {
-  "dependencies": { "dsh-mobile-shell": "^1.0.0" },
+  "dependencies": { "dsh-mobile-shell": "^1.0.1" },
   "dsh": { "profile": { "bundles": ["dsh-mobile-shell"] } }
 }
 ```
@@ -66,7 +66,7 @@ There is none. If 900 px is the wrong breakpoint for your device, edit the
 
 ## Compatibility
 
-Written against DSH **0.2.1-rc.3**. The rules target stable structural signals
+Checked against DSH **0.2.1-rc.3 and rc.4**. The rules target stable structural signals
 (`data-sidebar-collapsed`, `[data-composer-stat="…"]`, the `grid-template-columns`
 inline style on the frame) and stable class *suffixes* (`frame`, `sidebarCol`,
 `rightbarCol`), because the CSS-module hash in front of them changes between
@@ -75,6 +75,18 @@ builds. Two selectors do use build-specific names — `hHd-Xa_*` (sidebar) and
 
 If a future build drops those class names, the failure is cosmetic: the affected
 rule stops matching, and the rest of the shell still applies.
+
+### The right column is hidden *as a track*, not removed
+
+On narrow screens the app turns the right panel into a `position: absolute`
+overlay of `width: 100vw` anchored to the right column (`autoFullscreen` — see
+`dsh-client-ui-sidebar-right`: `const autoFullscreen = viewportWidth < 768`).
+That panel is what renders opened documents (`.md`, `.docx`, images), so
+`display: none` on the column — the obvious way to save the width — hides the
+document viewer too. 1.0.1 keeps the column in the DOM at 0 px and leaves its
+`overflow` visible, so the overlay still paints; only the 768–900 band, where
+the panel is still an in-flow column, keeps the old `display: none`.
+
 
 ## Why the whale is a `body::after`
 
@@ -105,6 +117,19 @@ Things that cost real debugging time on this build:
   — selectors over that seat can never match on Windows or the web.
 - **Class names are hashed.** Use `[class*="suffix"]` or `[class~="exact"]`;
   `[class~="x"]` is the safer one where both `x` and `xSomething` exist.
+
+## Changelog
+
+### 1.0.1
+- Fix: documents opened on a phone rendered into a hidden column, so the viewer
+  looked empty. The right column is no longer `display: none` below 768 px; it
+  keeps a 0 px track and lets the full-screen document overlay paint.
+- Docs: the right-column rule, the compatibility note above, and the README
+  table now describe that trade-off instead of "right panel: hidden".
+
+### 1.0.0
+- Initial release: single column, rail removed, whale toggle in the top bar,
+  floating `…` for the session header, consolidated stats row.
 
 ## License
 

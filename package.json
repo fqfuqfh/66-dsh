@@ -1,6 +1,6 @@
 {
   "name": "dsh-mobile-shell",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "type": "module",
   "description": "Narrow-screen shell for the DSH web GUI: a single column, no right panel, the sidebar rail removed, and the session list reachable from a floating whale button in the top bar.",
